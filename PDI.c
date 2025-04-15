@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 FILE *imgPrincipal, *imgMonoSimples, *imgMonoPonderada, *imgNegativa;
-int lin, col, quantZ, **matR, **matG, **matB, **matSaida;
+int lin, col, quantZ, **matR, **matG, **matB;
 
 char *mudar_extensao(char arg[], int num)
 {
@@ -34,6 +34,7 @@ char *mudar_extensao(char arg[], int num)
         nvName[i + 3] = 'p';
         nvName[i + 4] = 'g';
         nvName[i + 5] = 'm';
+        nvName[i + 6] = '\0';
       }
       else if (num == 2)
       {
@@ -42,6 +43,7 @@ char *mudar_extensao(char arg[], int num)
         nvName[i + 3] = 'p';
         nvName[i + 4] = 'g';
         nvName[i + 5] = 'm';
+        nvName[i + 6] = '\0';
       }
       else
       {
@@ -50,6 +52,7 @@ char *mudar_extensao(char arg[], int num)
         nvName[i + 3] = 'p';
         nvName[i + 4] = 'p';
         nvName[i + 5] = 'm';
+        nvName[i + 6] = '\0';
       }
       break;
     }
@@ -99,6 +102,7 @@ void abrir_imagem(int argc, char *argv[])
     printf("-----------------------------------------------------------------------\n");
     exit(1);
   }
+  free(nvName);
 }
 
 void ler_header()
@@ -210,10 +214,15 @@ void gerar_negativa()
 
 void liberar_memoria()
 {
+  for (int i = 0; i < lin; i++)
+  {
+    free(matR[i]);
+    free(matG[i]);
+    free(matB[i]);
+  }
   free(matR);
   free(matG);
   free(matB);
-  free(matSaida);
 }
 
 void fechar_arquivos()
@@ -234,4 +243,6 @@ int main(int argc, char *argv[])
   gerar_mono_ponderada();
   gerar_negativa();
   liberar_memoria();
+  fechar_arquivos();
+  return 0;
 }
